@@ -1,575 +1,1254 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Ivanna 🎀</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            min-height: 100vh;
-            font-family: "Trebuchet MS", Arial, sans-serif;
-            background:
-                radial-gradient(circle at top, #fff7fb 0%, #ffd6e7 50%, #ff9fc2 100%);
-            color: #5a3042;
-            overflow-x: hidden;
-        }
-        .pantalla {
-            min-height: 100vh;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 30px 20px;
-            position: relative;
-        }
-        .pantalla.activa {
-            display: flex;
-            animation: aparecer 0.8s ease;
-        }
-        /* MOÑO */
-        .mono {
-            position: relative;
-            width: 100px;
-            height: 60px;
-            margin-bottom: 25px;
-        }
-        .mono::before,
-        .mono::after {
-            content: "";
-            position: absolute;
-            width: 55px;
-            height: 45px;
-            background: #e91e63;
-            border: 4px solid #a9003c;
-            top: 5px;
-        }
-        .mono::before {
-            left: 0;
-            border-radius: 60% 20% 60% 20%;
-            transform: rotate(-15deg);
-        }
-        .mono::after {
-            right: 0;
-            border-radius: 20% 60% 20% 60%;
-            transform: rotate(15deg);
-        }
-        .centro-mono {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background: #ffccdc;
-            border: 4px solid #a9003c;
-            border-radius: 50%;
-            left: 50%;
-            top: 10px;
-            transform: translateX(-50%);
-            z-index: 2;
-        }
-        /* TEXTOS */
-        h1 {
-            font-size: clamp(40px, 10vw, 70px);
-            color: #d4145a;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0 white;
-        }
-        h2 {
-            font-size: clamp(28px, 7vw, 48px);
-            color: #c2185b;
-            margin-bottom: 25px;
-        }
-        .subtitulo {
-            font-size: 19px;
-            color: #704052;
-            max-width: 550px;
-            line-height: 1.7;
-            margin-bottom: 30px;
-        }
-        .texto {
-            max-width: 650px;
-            font-size: 18px;
-            line-height: 1.8;
-            color: #633c4c;
-            background: rgba(255,255,255,0.82);
-            padding: 30px;
-            border-radius: 25px;
-            border: 2px solid #ffc1d8;
-            box-shadow: 0 15px 35px rgba(160,50,90,0.12);
-            margin-bottom: 30px;
-        }
-        .destacado {
-            color: #d4145a;
-            font-weight: bold;
-        }
-        /* BOTONES */
-        .boton {
-            border: none;
-            padding: 16px 35px;
-            border-radius: 50px;
-            background: linear-gradient(135deg, #ff4f8b, #d4145a);
-            color: white;
-            font-size: 17px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(212,20,90,0.3);
-            transition: 0.2s;
-        }
-        .boton:hover {
-            transform: translateY(-4px) scale(1.03);
-        }
-        .boton:active {
-            transform: scale(0.95);
-        }
-        /* LOGIN */
-        .login {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255,255,255,0.9);
-            padding: 35px 25px;
-            border-radius: 30px;
-            border: 2px solid #ffb4ce;
-            box-shadow: 0 20px 50px rgba(100,30,60,0.18);
-        }
-        .login input {
-            width: 100%;
-            padding: 15px;
-            margin: 15px 0;
-            border: 2px solid #ffc1d8;
-            border-radius: 30px;
-            outline: none;
-            text-align: center;
-            font-size: 17px;
-        }
-        .error {
-            color: #d4145a;
-            margin-top: 15px;
-            display: none;
-            font-weight: bold;
-        }
-        /* SOBRE */
-        .sobre {
-            width: 240px;
-            height: 160px;
-            background: white;
-            border: 4px solid #e91e63;
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-            box-shadow: 0 20px 40px rgba(100,30,60,0.2);
-            transition: transform 0.3s;
-        }
-        .sobre:hover {
-            transform: translateY(-8px) rotate(-2deg);
-        }
-        .sobre::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 116px solid transparent;
-            border-right: 116px solid transparent;
-            border-top: 85px solid #ffb6cf;
-            z-index: 2;
-        }
-        .sello {
-            position: absolute;
-            left: 50%;
-            top: 65%;
-            transform: translate(-50%, -50%);
-            width: 45px;
-            height: 45px;
-            background: #e91e63;
-            border-radius: 50%;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 23px;
-            z-index: 3;
-        }
-        /* CORAZONES */
-        .corazon {
-            position: fixed;
-            bottom: -50px;
-            pointer-events: none;
-            animation: flotar 5s linear forwards;
-            z-index: 20;
-        }
-        @keyframes flotar {
-            0% {
-                transform: translateY(0) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-110vh) scale(1.2) rotate(25deg);
-                opacity: 0;
-            }
-        }
-        @keyframes aparecer {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .latido {
-            animation: latido 1.4s infinite;
-        }
-        @keyframes latido {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-        /* FINAL */
-        .final {
-            max-width: 600px;
-            padding: 35px 25px;
-            background: rgba(255,255,255,0.92);
-            border-radius: 30px;
-            border: 3px solid #ff8fb5;
-            box-shadow: 0 20px 50px rgba(100,30,60,0.2);
-        }
-        .final p {
-            font-size: 20px;
-            line-height: 1.8;
-            margin-bottom: 18px;
-        }
-        @media (max-width: 600px) {
-            .texto {
-                font-size: 16px;
-                padding: 22px;
-            }
-            .subtitulo {
-                font-size: 17px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffd6e7">
+<title>Para Ivanna ❤️</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,255,255,.9),transparent 25%),
+        radial-gradient(circle at 80% 80%,rgba(255,190,215,.35),transparent 30%),
+        linear-gradient(135deg,#fff7fa,#ffe5ef,#fff7fb);
+    color:#5c3947;
+}
+
+/* =========================
+   FONDO
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.glow{
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.35;
+    animation:moveGlow 12s infinite alternate ease-in-out;
+}
+
+.glow.one{
+    background:#ffb7d2;
+    top:-100px;
+    left:-100px;
+}
+
+.glow.two{
+    background:#ffd7e8;
+    bottom:-120px;
+    right:-100px;
+    animation-delay:2s;
+}
+
+@keyframes moveGlow{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(80px,50px) scale(1.2);}
+}
+
+/* =========================
+   CORAZONES
+========================= */
+
+.heart{
+    position:fixed;
+    bottom:-40px;
+    font-size:20px;
+    opacity:0;
+    pointer-events:none;
+    animation:floatHeart linear forwards;
+    z-index:20;
+}
+
+@keyframes floatHeart{
+    0%{
+        transform:translateY(0) scale(.6) rotate(0deg);
+        opacity:0;
+    }
+    15%{opacity:.8;}
+    100%{
+        transform:translateY(-110vh) translateX(var(--move))
+                   scale(1.3) rotate(25deg);
+        opacity:0;
+    }
+}
+
+/* =========================
+   PANTALLA
+========================= */
+
+.screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:25px;
+    opacity:0;
+    visibility:hidden;
+    transform:scale(1.04);
+    transition:
+        opacity .8s ease,
+        transform .8s ease,
+        visibility .8s;
+    z-index:5;
+}
+
+.screen.active{
+    opacity:1;
+    visibility:visible;
+    transform:scale(1);
+}
+
+/* =========================
+   TARJETAS
+========================= */
+
+.card{
+    width:min(900px,94vw);
+    max-height:90vh;
+    overflow:auto;
+    padding:45px 30px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,.8);
+    background:rgba(255,255,255,.72);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:35px;
+    box-shadow:
+        0 30px 80px rgba(128,61,89,.12),
+        inset 0 1px rgba(255,255,255,.9);
+    position:relative;
+}
+
+.card::-webkit-scrollbar{
+    width:0;
+}
+
+/* =========================
+   LAZOS
+========================= */
+
+.bow{
+    width:65px;
+    height:45px;
+    margin:0 auto 20px;
+    position:relative;
+    animation:bowFloat 3s ease-in-out infinite;
+}
+
+.bow:before,
+.bow:after{
+    content:"";
+    position:absolute;
+    top:3px;
+    width:32px;
+    height:38px;
+    background:#ff91b7;
+    border-radius:70% 20% 70% 20%;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
+}
+
+.bow:before{
+    left:0;
+    transform:rotate(-25deg);
+}
+
+.bow:after{
+    right:0;
+    transform:scaleX(-1) rotate(-25deg);
+}
+
+.bow span{
+    position:absolute;
+    z-index:2;
+    width:22px;
+    height:22px;
+    background:#ff6fa1;
+    border-radius:50%;
+    top:11px;
+    left:21px;
+    box-shadow:0 3px 8px rgba(190,70,110,.2);
+}
+
+@keyframes bowFloat{
+    0%,100%{transform:translateY(0) rotate(0);}
+    50%{transform:translateY(-6px) rotate(2deg);}
+}
+
+/* =========================
+   TIPOGRAFÍA
+========================= */
+
+h1{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(42px,8vw,76px);
+    line-height:.95;
+    color:#63394c;
+    margin-bottom:22px;
+    font-weight:600;
+}
+
+h2{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(34px,6vw,58px);
+    color:#63394c;
+    margin-bottom:20px;
+}
+
+p{
+    font-size:clamp(15px,2vw,18px);
+    line-height:1.9;
+    color:#775665;
+    max-width:700px;
+    margin:0 auto 20px;
+}
+
+.highlight{
+    color:#df638f;
+    font-weight:600;
+}
+
+/* =========================
+   TEXTO MISTERIOSO
+========================= */
+
+.mystery{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(28px,5vw,48px);
+    line-height:1.4;
+    color:#704052;
+}
+
+.cursor{
+    display:inline-block;
+    width:2px;
+    height:1em;
+    background:#df638f;
+    margin-left:4px;
+    animation:blink .8s infinite;
+    vertical-align:-2px;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+button{
+    border:none;
+    outline:none;
+    cursor:pointer;
+    font-family:'Poppins',sans-serif;
+}
+
+.next-btn{
+    margin-top:25px;
+    padding:14px 30px;
+    border-radius:50px;
+    color:white;
+    background:linear-gradient(135deg,#f27ca5,#df5f91);
+    box-shadow:0 10px 25px rgba(220,88,137,.25);
+    font-size:15px;
+    transition:.3s;
+}
+
+.next-btn:hover{
+    transform:translateY(-3px) scale(1.03);
+    box-shadow:0 15px 30px rgba(220,88,137,.35);
+}
+
+.next-btn:active{
+    transform:scale(.95);
+}
+
+/* =========================
+   LISTA DE COSAS
+========================= */
+
+.things{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    max-width:650px;
+    margin:30px auto;
+}
+
+.thing{
+    padding:22px 15px;
+    border-radius:22px;
+    background:rgba(255,237,244,.7);
+    border:1px solid rgba(255,182,208,.35);
+    transition:.4s;
+    animation:appearUp .7s both;
+}
+
+.thing:nth-child(2){animation-delay:.15s;}
+.thing:nth-child(3){animation-delay:.3s;}
+.thing:nth-child(4){animation-delay:.45s;}
+
+.thing:hover{
+    transform:translateY(-7px) rotate(-1deg);
+    background:#fff0f6;
+}
+
+.emoji{
+    display:block;
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+@keyframes appearUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================
+   ESTRELLAS
+========================= */
+
+.stars{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin:25px 0;
+}
+
+.star{
+    font-size:22px;
+    animation:twinkle 1.8s infinite;
+}
+
+.star:nth-child(2){animation-delay:.3s;}
+.star:nth-child(3){animation-delay:.6s;}
+.star:nth-child(4){animation-delay:.9s;}
+.star:nth-child(5){animation-delay:1.2s;}
+
+@keyframes twinkle{
+    0%,100%{
+        opacity:.3;
+        transform:scale(.8);
+    }
+    50%{
+        opacity:1;
+        transform:scale(1.25);
+    }
+}
+
+/* =========================
+   SOBRE
+========================= */
+
+.envelope-wrapper{
+    margin:35px auto;
+    width:230px;
+    height:160px;
+    perspective:900px;
+    cursor:pointer;
+}
+
+.envelope{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 1s ease;
+}
+
+.envelope.open{
+    transform:translateY(20px);
+}
+
+.envelope-body{
+    position:absolute;
+    inset:0;
+    background:#ff9fc0;
+    border-radius:10px;
+    box-shadow:0 20px 35px rgba(150,65,95,.2);
+}
+
+.envelope-body:before,
+.envelope-body:after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    width:50%;
+    height:100%;
+    background:#ff8fb5;
+}
+
+.envelope-body:before{
+    left:0;
+    clip-path:polygon(0 0,100% 100%,0 100%);
+}
+
+.envelope-body:after{
+    right:0;
+    clip-path:polygon(100% 0,100% 100%,0 100%);
+}
+
+.flap{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#ffb1cc;
+    clip-path:polygon(0 0,100% 0,50% 65%);
+    transform-origin:top;
+    transition:transform 1s ease;
+    z-index:4;
+}
+
+.envelope.open .flap{
+    transform:rotateX(180deg);
+}
+
+.letter{
+    position:absolute;
+    width:82%;
+    height:100px;
+    background:#fffafc;
+    left:9%;
+    top:25px;
+    border-radius:5px;
+    z-index:2;
+    transition:transform 1s ease;
+    box-shadow:0 5px 15px rgba(100,50,70,.12);
+}
+
+.envelope.open .letter{
+    transform:translateY(-90px);
+}
+
+/* =========================
+   FINAL
+========================= */
+
+.final-question{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(32px,6vw,60px);
+    color:#df5f91;
+    margin:25px 0;
+}
+
+.signature{
+    margin-top:30px;
+    font-family:'Cormorant Garamond',serif;
+    font-size:28px;
+    color:#754458;
+}
+
+/* =========================
+   PASSWORD
+========================= */
+
+#passwordScreen{
+    z-index:100;
+    background:
+        radial-gradient(circle at center,#fff 0%,#ffe7f0 45%,#ffd3e3 100%);
+}
+
+.lock{
+    font-size:55px;
+    margin-bottom:15px;
+    animation:lockFloat 2s infinite ease-in-out;
+}
+
+@keyframes lockFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+}
+
+.password-box{
+    width:min(400px,90vw);
+    padding:40px 25px;
+    border-radius:30px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(15px);
+    box-shadow:0 25px 70px rgba(100,50,70,.15);
+    text-align:center;
+}
+
+.password-box input{
+    width:100%;
+    padding:15px 18px;
+    border:1px solid #f4bfd2;
+    border-radius:50px;
+    outline:none;
+    text-align:center;
+    font-size:16px;
+    margin:15px 0;
+    background:#fffafd;
+}
+
+.password-box input:focus{
+    border-color:#df6c97;
+    box-shadow:0 0 0 4px rgba(223,108,151,.1);
+}
+
+.error{
+    color:#d6537f;
+    min-height:24px;
+    font-size:13px;
+    margin-top:10px;
+}
+
+/* =========================
+   INDICADOR
+========================= */
+
+.progress{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:7px;
+    z-index:50;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:rgba(210,100,140,.25);
+    transition:.4s;
+}
+
+.dot.active{
+    width:22px;
+    border-radius:10px;
+    background:#df6c97;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:600px){
+
+    .card{
+        padding:35px 20px;
+        border-radius:28px;
+    }
+
+    .things{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .thing{
+        padding:18px 10px;
+    }
+
+    .emoji{
+        font-size:27px;
+    }
+
+    .envelope-wrapper{
+        transform:scale(.9);
+    }
+}
+</style>
 </head>
+
 <body>
-    <!-- PANTALLA DE ACCESO -->
-    <section id="acceso" class="pantalla activa">
-        <div class="mono">
-            <div class="centro-mono"></div>
-        </div>
-        <h1>Ivanna 🎀</h1>
-        <div class="login">
-            <h2>Hay algo para ti...</h2>
-            <p class="subtitulo">
-                Pero primero necesito saber si realmente eres tú. 👀
-            </p>
-            <input
-                type="password"
-                id="clave"
-                placeholder="Escribe la clave"
-                autocomplete="off"
-            >
-            <button class="boton" onclick="verificarClave()">
-                Entrar ❤️
-            </button>
-            <p id="error" class="error">
-                Mmm... esa no es. Inténtalo otra vez. 🎀
-            </p>
-        </div>
-    </section>
-    <!-- INICIO -->
-    <section id="inicio" class="pantalla">
-        <div class="mono">
-            <div class="centro-mono"></div>
-        </div>
-        <h1>Ivanna...</h1>
-        <p class="subtitulo">
-            Tengo algo que decirte.
-            <br><br>
-            Pero primero tendrás que descubrirlo. ✨
+
+<!-- FONDO -->
+<div class="background">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+</div>
+
+<!-- =========================
+     PASSWORD
+========================= -->
+
+<section class="screen active" id="passwordScreen">
+
+    <div class="password-box">
+
+        <div class="lock">🔐</div>
+
+        <h2>Una pequeña sorpresa</h2>
+
+        <p>
+            Esta página tiene una puerta...
+            <br>
+            pero solo hay una persona que debería poder abrirla.
         </p>
-        <button class="boton" onclick="siguiente('inicio','especial')">
-            Descubrir 🎀
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Escribe la clave..."
+            autocomplete="off"
+        >
+
+        <button class="next-btn" onclick="checkPassword()">
+            Entrar ❤️
         </button>
-    </section>
-    <!-- PERSONA ESPECIAL -->
-    <section id="especial" class="pantalla">
-        <h2>Hay personas especiales...</h2>
-        <div class="texto">
-            <p>
-                Hay personas que llegan a nuestra vida
-                y, sin darse cuenta, empiezan a ocupar
-                un lugar diferente.
-            </p>
+
+        <div class="error" id="error"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HISTORIA
+========================= -->
+
+<section class="screen" id="screen1">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
+        <h1>Ivanna...</h1>
+
+        <p class="mystery">
+            Tengo algo que decirte.
             <br>
-            <p>
-                Tú eres una de esas personas.
-            </p>
-            <br>
-            <p>
-                Me gusta tu
-                <span class="destacado">sonrisa</span>,
-                tu
-                <span class="destacado">cabello</span>,
-                tu
-                <span class="destacado">personalidad</span>...
-            </p>
-            <br>
-            <p>
-                Y sí...
-                también me gustan mucho
-                <span class="destacado">tus besos</span>. ❤️
-            </p>
+            Pero primero tendrás que descubrirlo.
+        </p>
+
+        <div class="stars">
+            <span class="star">✦</span>
+            <span class="star">♡</span>
+            <span class="star">✦</span>
+            <span class="star">♡</span>
+            <span class="star">✦</span>
         </div>
-        <button class="boton" onclick="siguiente('especial','futuro')">
+
+        <button class="next-btn" onclick="nextScreen()">
+            Descubrir ✨
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen2">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
+        <h2>Hay personas especiales...</h2>
+
+        <p>
+            Y luego están esas personas que,
+            sin darse cuenta,
+            empiezan a ocupar un pequeño espacio
+            en nuestra cabeza.
+        </p>
+
+        <p>
+            Y bueno...
+            tú tienes la culpa de eso. 🤍
+        </p>
+
+        <div class="things">
+
+            <div class="thing">
+                <span class="emoji">😊</span>
+                Tu sonrisa
+            </div>
+
+            <div class="thing">
+                <span class="emoji">🎀</span>
+                Tu cabello
+            </div>
+
+            <div class="thing">
+                <span class="emoji">✨</span>
+                Tu personalidad
+            </div>
+
+            <div class="thing">
+                <span class="emoji">💋</span>
+                Tus besos
+            </div>
+
+        </div>
+
+        <button class="next-btn" onclick="nextScreen()">
             Continuar 💗
         </button>
-    </section>
-    <!-- FUTURO -->
-    <section id="futuro" class="pantalla">
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen3">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
         <h2>Y hay algo más...</h2>
-        <div class="texto">
-            <p>
-                Sé que tienes sueños, proyectos
-                y muchas cosas por delante.
-            </p>
-            <br>
-            <p>
-                Y si algún día decides convertirte
-                en <span class="destacado">ingeniera</span>,
-                estoy seguro de que te va a ir muy bien.
-            </p>
-            <br>
-            <p>
-                Porque no se trata solamente
-                de estudiar una carrera.
-            </p>
-            <br>
-            <p>
-                También necesitas perseverancia,
-                personalidad, inteligencia
-                y ganas de salir adelante.
-            </p>
-            <br>
-            <p>
-                Y creo que tienes mucho de eso. ❤️
-            </p>
-        </div>
-        <button class="boton" onclick="siguiente('futuro','misterio')">
-            Pero falta algo... 👀
-        </button>
-    </section>
-    <!-- MISTERIO -->
-    <section id="misterio" class="pantalla">
-        <div class="mono latido">
-            <div class="centro-mono"></div>
-        </div>
-        <h2>...</h2>
-        <p class="subtitulo">
-            Hasta aquí probablemente
-            ya sabes por dónde va esto.
-            <br><br>
-            Pero todavía no he dicho
-            lo que realmente quería decir.
+
+        <p>
+            Si algún día decides convertirte en
+            <span class="highlight">ingeniera</span>,
+            espero que nunca dudes de lo que eres capaz de hacer.
         </p>
-        <button class="boton" onclick="siguiente('misterio','confesion')">
-            Continuar...
+
+        <p>
+            Porque tienes mucho por descubrir,
+            mucho por aprender y muchísimo por construir.
+        </p>
+
+        <p>
+            Y estoy seguro de que podrías hacerlo
+            <span class="highlight">muy bien</span>.
+        </p>
+
+        <div class="stars">
+            <span class="star">✦</span>
+            <span class="star">✦</span>
+            <span class="star">✦</span>
+        </div>
+
+        <button class="next-btn" onclick="nextScreen()">
+            Hay algo más... 👀
         </button>
-    </section>
-    <!-- CONFESIÓN -->
-    <section id="confesion" class="pantalla">
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen4">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
+        <h2>Pero espera...</h2>
+
+        <p id="typeText" class="mystery"></p>
+
+        <span class="cursor"></span>
+
+        <br>
+
+        <button
+            class="next-btn"
+            id="mysteryButton"
+            onclick="nextScreen()"
+            style="display:none;"
+        >
+            Creo que ya entendí... 💭
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen5">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
         <h2>Ivanna...</h2>
-        <p class="subtitulo">
+
+        <p class="mystery">
             De repente...
         </p>
-        <div class="texto">
-            <p>
-                De repente te convertiste
-                en alguien muy especial para mí.
-            </p>
-            <br>
-            <p>
-                Y quizá no te lo había dicho
-                de esta manera...
-            </p>
-            <br>
-            <p class="destacado">
-                Pero me gustas. ❤️
-            </p>
-        </div>
-        <button class="boton" onclick="siguiente('confesion','sobre')">
-            Hay algo más para ti 💌
-        </button>
-    </section>
-    <!-- SOBRE -->
-    <section id="sobre" class="pantalla">
-        <h2>Una última cosa...</h2>
-        <p class="subtitulo">
-            Toca el sobre. 💌
+
+        <p>
+            De repente te convertiste en alguien
+            <span class="highlight">muy especial para mí.</span>
         </p>
-        <div class="sobre" onclick="abrirCarta()">
-            <div class="sello">
-                ❤️
+
+        <p>
+            No sé exactamente en qué momento pasó.
+            <br>
+            Ni siquiera sé si debería decirlo.
+        </p>
+
+        <p>
+            Pero hay cosas que simplemente
+            uno siente...
+        </p>
+
+        <p class="highlight" style="font-size:22px;">
+            y tú me gustas. ❤️
+        </p>
+
+        <button class="next-btn" onclick="nextScreen()">
+            Hay una última cosa... 💌
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen6">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
+        <h2>Encontré algo para ti...</h2>
+
+        <p>
+            Pero tendrás que abrirlo.
+        </p>
+
+        <div
+            class="envelope-wrapper"
+            onclick="openEnvelope()"
+        >
+
+            <div class="envelope" id="envelope">
+
+                <div class="envelope-body"></div>
+
+                <div class="letter"></div>
+
+                <div class="flap"></div>
+
             </div>
+
         </div>
-    </section>
-    <!-- FINAL -->
-    <section id="final" class="pantalla">
-        <div class="final">
-            <div class="mono">
-                <div class="centro-mono"></div>
-            </div>
-            <h2>Ivanna ❤️</h2>
-            <p>
-                Solo quería que supieras
-                que eres una persona especial.
-            </p>
-            <p>
-                Me gusta tu forma de ser,
-                tu sonrisa y esa manera
-                tan tuya de hacerte especial.
-            </p>
-            <p>
-                Y quiero que sepas que,
-                si decides perseguir tus sueños,
-                especialmente si decides
-                convertirte en ingeniera,
-                creo que te puede ir increíble.
-            </p>
-            <p class="destacado">
-                Gracias por ser tú. 🎀
-            </p>
-            <button class="boton" onclick="mostrarPregunta()">
-                Tengo una pregunta... 💗
-            </button>
-            <p id="pregunta"
-               class="destacado"
-               style="display:none; margin-top:25px;">
-                ¿Me dejas seguir descubriendo
-                todo lo bonito que hay en ti? ❤️
-            </p>
+
+        <p id="envelopeHint">
+            Toca el sobre 💌
+        </p>
+
+        <button
+            class="next-btn"
+            id="finalButton"
+            onclick="nextScreen()"
+            style="display:none;"
+        >
+            Abrir la última página ✨
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="screen" id="screen7">
+
+    <div class="card">
+
+        <div class="bow"><span></span></div>
+
+        <h1>Ivanna ❤️</h1>
+
+        <p>
+            No hice esto porque tenga todas
+            las respuestas.
+        </p>
+
+        <p>
+            Lo hice porque quería que supieras
+            que eres alguien que me parece
+            <span class="highlight">increíblemente especial.</span>
+        </p>
+
+        <p>
+            Y quizás...
+            quién sabe...
+            esto sea apenas el comienzo
+            de algo bonito.
+        </p>
+
+        <div class="final-question">
+            ¿Qué dices?
         </div>
-    </section>
-    <script>
-        /*
-         * =====================================
-         * CLAVE DE ACCESO
-         * =====================================
-         *
-         * Puedes cambiar "IVANNA" por cualquier
-         * palabra que quieras.
-         */
-        const CLAVE = "IVANNA";
-        function verificarClave() {
-            const entrada =
-                document.getElementById("clave")
-                .value
-                .trim()
-                .toUpperCase();
-            const error =
-                document.getElementById("error");
-            if (entrada === CLAVE) {
-                document
-                    .getElementById("acceso")
-                    .classList.remove("activa");
-                document
-                    .getElementById("inicio")
-                    .classList.add("activa");
-                crearCorazones(12);
-            } else {
-                error.style.display = "block";
-                document
-                    .getElementById("clave")
-                    .value = "";
-            }
-        }
-        /*
-         * Permite presionar ENTER
-         */
+
+        <p>
+            🌸
+        </p>
+
+        <div class="signature">
+            — Alguien que quería decírtelo de una manera diferente.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PROGRESO -->
+
+<div class="progress" id="progress" style="display:none;">
+
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   CONFIGURACIÓN
+========================= */
+
+const CLAVE = "IVANNA";
+
+let currentScreen = 1;
+const totalScreens = 7;
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+function checkPassword(){
+
+    const input = document
+        .getElementById("password")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const error = document.getElementById("error");
+
+    if(input === CLAVE){
+
         document
-            .getElementById("clave")
-            .addEventListener("keydown", function(event) {
-                if (event.key === "Enter") {
-                    verificarClave();
-                }
-            });
-        /*
-         * Cambiar de pantalla
-         */
-        function siguiente(actual, nueva) {
-            document
-                .getElementById(actual)
-                .classList.remove("activa");
-            document
-                .getElementById(nueva)
-                .classList.add("activa");
-            crearCorazones(8);
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        }
-        /*
-         * Abrir carta
-         */
-        function abrirCarta() {
-            siguiente("sobre", "final");
-            crearCorazones(30);
-        }
-        /*
-         * Pregunta final
-         */
-        function mostrarPregunta() {
-            const pregunta =
-                document.getElementById("pregunta");
-            pregunta.style.display = "block";
-            crearCorazones(35);
-        }
-        /*
-         * Corazones flotantes
-         */
-        function crearCorazones(cantidad) {
-            const simbolos = [
-                "❤️",
-                "💕",
-                "💗",
-                "💖",
-                "🎀",
-                "🌸"
-            ];
-            for (let i = 0; i < cantidad; i++) {
-                const elemento =
-                    document.createElement("div");
-                elemento.className = "corazon";
-                elemento.textContent =
-                    simbolos[
-                        Math.floor(
-                            Math.random() *
-                            simbolos.length
-                        )
-                    ];
-                elemento.style.left =
-                    Math.random() * 100 + "vw";
-                elemento.style.fontSize =
-                    (15 + Math.random() * 25) + "px";
-                elemento.style.animationDuration =
-                    (3 + Math.random() * 3) + "s";
-                document.body.appendChild(elemento);
-                setTimeout(function() {
-                    elemento.remove();
-                }, 6500);
+            .getElementById("passwordScreen")
+            .classList.remove("active");
+
+        document
+            .getElementById("screen1")
+            .classList.add("active");
+
+        document
+            .getElementById("progress")
+            .style.display = "flex";
+
+        createHearts();
+
+    }else{
+
+        error.textContent =
+            "Mmm... esa no parece ser la clave 👀";
+
+        const box =
+            document.querySelector(".password-box");
+
+        box.animate(
+            [
+                {transform:"translateX(0)"},
+                {transform:"translateX(-8px)"},
+                {transform:"translateX(8px)"},
+                {transform:"translateX(0)"}
+            ],
+            {
+                duration:350
             }
+        );
+    }
+}
+
+
+/* ENTER EN PASSWORD */
+
+document
+    .getElementById("password")
+    .addEventListener("keydown",function(e){
+
+        if(e.key === "Enter"){
+            checkPassword();
         }
-    </script>
+
+    });
+
+
+/* =========================
+   NAVEGACIÓN
+========================= */
+
+function nextScreen(){
+
+    const current =
+        document.getElementById("screen" + currentScreen);
+
+    current.classList.remove("active");
+
+    currentScreen++;
+
+    if(currentScreen > totalScreens){
+        currentScreen = totalScreens;
+    }
+
+    const next =
+        document.getElementById("screen" + currentScreen);
+
+    next.classList.add("active");
+
+    updateProgress();
+
+    if(currentScreen === 4){
+        startTyping();
+    }
+
+    createHearts();
+}
+
+
+/* =========================
+   PROGRESO
+========================= */
+
+function updateProgress(){
+
+    const dots =
+        document.querySelectorAll(".dot");
+
+    dots.forEach((dot,index)=>{
+
+        dot.classList.toggle(
+            "active",
+            index === currentScreen - 1
+        );
+
+    });
+}
+
+
+/* =========================
+   TEXTO MISTERIOSO
+========================= */
+
+let typingStarted = false;
+
+function startTyping(){
+
+    if(typingStarted) return;
+
+    typingStarted = true;
+
+    const text =
+        "Quizás todavía no lo sabes... pero tú eres la razón de que esta página exista.";
+
+    const element =
+        document.getElementById("typeText");
+
+    const button =
+        document.getElementById("mysteryButton");
+
+    let index = 0;
+
+    function type(){
+
+        if(index < text.length){
+
+            element.textContent += text.charAt(index);
+
+            index++;
+
+            setTimeout(type,45);
+
+        }else{
+
+            setTimeout(()=>{
+
+                button.style.display = "inline-block";
+
+                button.animate(
+                    [
+                        {opacity:0,transform:"translateY(10px)"},
+                        {opacity:1,transform:"translateY(0)"}
+                    ],
+                    {
+                        duration:600,
+                        fill:"forwards"
+                    }
+                );
+
+            },500);
+        }
+    }
+
+    type();
+}
+
+
+/* =========================
+   SOBRE
+========================= */
+
+let envelopeOpened = false;
+
+function openEnvelope(){
+
+    if(envelopeOpened) return;
+
+    envelopeOpened = true;
+
+    const envelope =
+        document.getElementById("envelope");
+
+    envelope.classList.add("open");
+
+    document.getElementById("envelopeHint")
+        .textContent =
+        "Creo que ya puedes leer lo que dice... 💗";
+
+    setTimeout(()=>{
+
+        const button =
+            document.getElementById("finalButton");
+
+        button.style.display = "inline-block";
+
+        button.animate(
+            [
+                {opacity:0,transform:"translateY(15px)"},
+                {opacity:1,transform:"translateY(0)"}
+            ],
+            {
+                duration:700,
+                fill:"forwards"
+            }
+        );
+
+        createHearts();
+
+    },1000);
+}
+
+
+/* =========================
+   CORAZONES FLOTANTES
+========================= */
+
+function createHeart(){
+
+    const heart =
+        document.createElement("div");
+
+    heart.className = "heart";
+
+    const hearts = ["♥","♡","💗","💕","✦"];
+
+    heart.textContent =
+        hearts[Math.floor(Math.random()*hearts.length)];
+
+    heart.style.left =
+        Math.random()*100 + "vw";
+
+    heart.style.fontSize =
+        (12 + Math.random()*20) + "px";
+
+    heart.style.setProperty(
+        "--move",
+        (-80 + Math.random()*160) + "px"
+    );
+
+    heart.style.animationDuration =
+        (5 + Math.random()*6) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },12000);
+}
+
+function createHearts(){
+
+    for(let i=0;i<8;i++){
+
+        setTimeout(
+            createHeart,
+            i*180
+        );
+
+    }
+}
+
+
+/* =========================
+   CORAZONES CONTINUOS
+========================= */
+
+setInterval(()=>{
+
+    if(
+        document
+            .getElementById("passwordScreen")
+            .classList
+            .contains("active")
+    ){
+        return;
+    }
+
+    createHeart();
+
+},1800);
+
+
+/* =========================
+   CLICK / TOQUE
+========================= */
+
+document.addEventListener(
+    "click",
+    function(){
+
+        if(currentScreen > 0){
+            createHeart();
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>
