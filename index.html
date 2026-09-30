@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ivanna 🎀</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top, #fff7fb 0%, #ffd6e7 50%, #ff9fc2 100%);
+            color: #5a3042;
+            overflow-x: hidden;
+        }
+        .pantalla {
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        .pantalla.activa {
+            display: flex;
+            animation: aparecer 0.8s ease;
+        }
+        /* MOÑO */
+        .mono {
+            position: relative;
+            width: 100px;
+            height: 60px;
+            margin-bottom: 25px;
+        }
+        .mono::before,
+        .mono::after {
+            content: "";
+            position: absolute;
+            width: 55px;
+            height: 45px;
+            background: #e91e63;
+            border: 4px solid #a9003c;
+            top: 5px;
+        }
+        .mono::before {
+            left: 0;
+            border-radius: 60% 20% 60% 20%;
+            transform: rotate(-15deg);
+        }
+        .mono::after {
+            right: 0;
+            border-radius: 20% 60% 20% 60%;
+            transform: rotate(15deg);
+        }
+        .centro-mono {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: #ffccdc;
+            border: 4px solid #a9003c;
+            border-radius: 50%;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        /* TEXTOS */
+        h1 {
+            font-size: clamp(40px, 10vw, 70px);
+            color: #d4145a;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 white;
+        }
+        h2 {
+            font-size: clamp(28px, 7vw, 48px);
+            color: #c2185b;
+            margin-bottom: 25px;
+        }
+        .subtitulo {
+            font-size: 19px;
+            color: #704052;
+            max-width: 550px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+        .texto {
+            max-width: 650px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: #633c4c;
+            background: rgba(255,255,255,0.82);
+            padding: 30px;
+            border-radius: 25px;
+            border: 2px solid #ffc1d8;
+            box-shadow: 0 15px 35px rgba(160,50,90,0.12);
+            margin-bottom: 30px;
+        }
+        .destacado {
+            color: #d4145a;
+            font-weight: bold;
+        }
+        /* BOTONES */
+        .boton {
+            border: none;
+            padding: 16px 35px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff4f8b, #d4145a);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(212,20,90,0.3);
+            transition: 0.2s;
+        }
+        .boton:hover {
+            transform: translateY(-4px) scale(1.03);
+        }
+        .boton:active {
+            transform: scale(0.95);
+        }
+        /* LOGIN */
+        .login {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.9);
+            padding: 35px 25px;
+            border-radius: 30px;
+            border: 2px solid #ffb4ce;
+            box-shadow: 0 20px 50px rgba(100,30,60,0.18);
+        }
+        .login input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid #ffc1d8;
+            border-radius: 30px;
+            outline: none;
+            text-align: center;
+            font-size: 17px;
+        }
+        .error {
+            color: #d4145a;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        }
+        /* SOBRE */
+        .sobre {
+            width: 240px;
+            height: 160px;
+            background: white;
+            border: 4px solid #e91e63;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(100,30,60,0.2);
+            transition: transform 0.3s;
+        }
+        .sobre:hover {
+            transform: translateY(-8px) rotate(-2deg);
+        }
+        .sobre::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 116px solid transparent;
+            border-right: 116px solid transparent;
+            border-top: 85px solid #ffb6cf;
+            z-index: 2;
+        }
+        .sello {
+            position: absolute;
+            left: 50%;
+            top: 65%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: #e91e63;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            z-index: 3;
+        }
+        /* CORAZONES */
+        .corazon {
+            position: fixed;
+            bottom: -50px;
+            pointer-events: none;
+            animation: flotar 5s linear forwards;
+            z-index: 20;
+        }
+        @keyframes flotar {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.2) rotate(25deg);
+                opacity: 0;
+            }
+        }
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .latido {
+            animation: latido 1.4s infinite;
+        }
+        @keyframes latido {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        /* FINAL */
+        .final {
+            max-width: 600px;
+            padding: 35px 25px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 30px;
+            border: 3px solid #ff8fb5;
+            box-shadow: 0 20px 50px rgba(100,30,60,0.2);
+        }
+        .final p {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+        @media (max-width: 600px) {
+            .texto {
+                font-size: 16px;
+                padding: 22px;
+            }
+            .subtitulo {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PANTALLA DE ACCESO -->
+    <section id="acceso" class="pantalla activa">
+        <div class="mono">
+            <div class="centro-mono"></div>
+        </div>
+        <h1>Ivanna 🎀</h1>
+        <div class="login">
+            <h2>Hay algo para ti...</h2>
+            <p class="subtitulo">
+                Pero primero necesito saber si realmente eres tú. 👀
+            </p>
+            <input
+                type="password"
+                id="clave"
+                placeholder="Escribe la clave"
+                autocomplete="off"
+            >
+            <button class="boton" onclick="verificarClave()">
+                Entrar ❤️
+            </button>
+            <p id="error" class="error">
+                Mmm... esa no es. Inténtalo otra vez. 🎀
+            </p>
+        </div>
+    </section>
+    <!-- INICIO -->
+    <section id="inicio" class="pantalla">
+        <div class="mono">
+            <div class="centro-mono"></div>
+        </div>
+        <h1>Ivanna...</h1>
+        <p class="subtitulo">
+            Tengo algo que decirte.
+            <br><br>
+            Pero primero tendrás que descubrirlo. ✨
+        </p>
+        <button class="boton" onclick="siguiente('inicio','especial')">
+            Descubrir 🎀
+        </button>
+    </section>
+    <!-- PERSONA ESPECIAL -->
+    <section id="especial" class="pantalla">
+        <h2>Hay personas especiales...</h2>
+        <div class="texto">
+            <p>
+                Hay personas que llegan a nuestra vida
+                y, sin darse cuenta, empiezan a ocupar
+                un lugar diferente.
+            </p>
+            <br>
+            <p>
+                Tú eres una de esas personas.
+            </p>
+            <br>
+            <p>
+                Me gusta tu
+                <span class="destacado">sonrisa</span>,
+                tu
+                <span class="destacado">cabello</span>,
+                tu
+                <span class="destacado">personalidad</span>...
+            </p>
+            <br>
+            <p>
+                Y sí...
+                también me gustan mucho
+                <span class="destacado">tus besos</span>. ❤️
+            </p>
+        </div>
+        <button class="boton" onclick="siguiente('especial','futuro')">
+            Continuar 💗
+        </button>
+    </section>
+    <!-- FUTURO -->
+    <section id="futuro" class="pantalla">
+        <h2>Y hay algo más...</h2>
+        <div class="texto">
+            <p>
+                Sé que tienes sueños, proyectos
+                y muchas cosas por delante.
+            </p>
+            <br>
+            <p>
+                Y si algún día decides convertirte
+                en <span class="destacado">ingeniera</span>,
+                estoy seguro de que te va a ir muy bien.
+            </p>
+            <br>
+            <p>
+                Porque no se trata solamente
+                de estudiar una carrera.
+            </p>
+            <br>
+            <p>
+                También necesitas perseverancia,
+                personalidad, inteligencia
+                y ganas de salir adelante.
+            </p>
+            <br>
+            <p>
+                Y creo que tienes mucho de eso. ❤️
+            </p>
+        </div>
+        <button class="boton" onclick="siguiente('futuro','misterio')">
+            Pero falta algo... 👀
+        </button>
+    </section>
+    <!-- MISTERIO -->
+    <section id="misterio" class="pantalla">
+        <div class="mono latido">
+            <div class="centro-mono"></div>
+        </div>
+        <h2>...</h2>
+        <p class="subtitulo">
+            Hasta aquí probablemente
+            ya sabes por dónde va esto.
+            <br><br>
+            Pero todavía no he dicho
+            lo que realmente quería decir.
+        </p>
+        <button class="boton" onclick="siguiente('misterio','confesion')">
+            Continuar...
+        </button>
+    </section>
+    <!-- CONFESIÓN -->
+    <section id="confesion" class="pantalla">
+        <h2>Ivanna...</h2>
+        <p class="subtitulo">
+            De repente...
+        </p>
+        <div class="texto">
+            <p>
+                De repente te convertiste
+                en alguien muy especial para mí.
+            </p>
+            <br>
+            <p>
+                Y quizá no te lo había dicho
+                de esta manera...
+            </p>
+            <br>
+            <p class="destacado">
+                Pero me gustas. ❤️
+            </p>
+        </div>
+        <button class="boton" onclick="siguiente('confesion','sobre')">
+            Hay algo más para ti 💌
+        </button>
+    </section>
+    <!-- SOBRE -->
+    <section id="sobre" class="pantalla">
+        <h2>Una última cosa...</h2>
+        <p class="subtitulo">
+            Toca el sobre. 💌
+        </p>
+        <div class="sobre" onclick="abrirCarta()">
+            <div class="sello">
+                ❤️
+            </div>
+        </div>
+    </section>
+    <!-- FINAL -->
+    <section id="final" class="pantalla">
+        <div class="final">
+            <div class="mono">
+                <div class="centro-mono"></div>
+            </div>
+            <h2>Ivanna ❤️</h2>
+            <p>
+                Solo quería que supieras
+                que eres una persona especial.
+            </p>
+            <p>
+                Me gusta tu forma de ser,
+                tu sonrisa y esa manera
+                tan tuya de hacerte especial.
+            </p>
+            <p>
+                Y quiero que sepas que,
+                si decides perseguir tus sueños,
+                especialmente si decides
+                convertirte en ingeniera,
+                creo que te puede ir increíble.
+            </p>
+            <p class="destacado">
+                Gracias por ser tú. 🎀
+            </p>
+            <button class="boton" onclick="mostrarPregunta()">
+                Tengo una pregunta... 💗
+            </button>
+            <p id="pregunta"
+               class="destacado"
+               style="display:none; margin-top:25px;">
+                ¿Me dejas seguir descubriendo
+                todo lo bonito que hay en ti? ❤️
+            </p>
+        </div>
+    </section>
+    <script>
+        /*
+         * =====================================
+         * CLAVE DE ACCESO
+         * =====================================
+         *
+         * Puedes cambiar "IVANNA" por cualquier
+         * palabra que quieras.
+         */
+        const CLAVE = "IVANNA";
+        function verificarClave() {
+            const entrada =
+                document.getElementById("clave")
+                .value
+                .trim()
+                .toUpperCase();
+            const error =
+                document.getElementById("error");
+            if (entrada === CLAVE) {
+                document
+                    .getElementById("acceso")
+                    .classList.remove("activa");
+                document
+                    .getElementById("inicio")
+                    .classList.add("activa");
+                crearCorazones(12);
+            } else {
+                error.style.display = "block";
+                document
+                    .getElementById("clave")
+                    .value = "";
+            }
+        }
+        /*
+         * Permite presionar ENTER
+         */
+        document
+            .getElementById("clave")
+            .addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    verificarClave();
+                }
+            });
+        /*
+         * Cambiar de pantalla
+         */
+        function siguiente(actual, nueva) {
+            document
+                .getElementById(actual)
+                .classList.remove("activa");
+            document
+                .getElementById(nueva)
+                .classList.add("activa");
+            crearCorazones(8);
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+        /*
+         * Abrir carta
+         */
+        function abrirCarta() {
+            siguiente("sobre", "final");
+            crearCorazones(30);
+        }
+        /*
+         * Pregunta final
+         */
+        function mostrarPregunta() {
+            const pregunta =
+                document.getElementById("pregunta");
+            pregunta.style.display = "block";
+            crearCorazones(35);
+        }
+        /*
+         * Corazones flotantes
+         */
+        function crearCorazones(cantidad) {
+            const simbolos = [
+                "❤️",
+                "💕",
+                "💗",
+                "💖",
+                "🎀",
+                "🌸"
+            ];
+            for (let i = 0; i < cantidad; i++) {
+                const elemento =
+                    document.createElement("div");
+                elemento.className = "corazon";
+                elemento.textContent =
+                    simbolos[
+                        Math.floor(
+                            Math.random() *
+                            simbolos.length
+                        )
+                    ];
+                elemento.style.left =
+                    Math.random() * 100 + "vw";
+                elemento.style.fontSize =
+                    (15 + Math.random() * 25) + "px";
+                elemento.style.animationDuration =
+                    (3 + Math.random() * 3) + "s";
+                document.body.appendChild(elemento);
+                setTimeout(function() {
+                    elemento.remove();
+                }, 6500);
+            }
+        }
+    </script>
+</body>
+</html>
